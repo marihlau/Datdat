@@ -5,6 +5,7 @@ db_file = "test.db"  # Legg til riktig filtype for SQLite-databasen
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS kanSe (
 	gruppeID	INTEGER NOT NULL,
 	stykkeID	INTEGER NOT NULL,
@@ -134,10 +135,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS plass (
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS sal (
-	salID	INTEGER NOT NULL,
+	salID	INTEGER NOT NULL PRIMARY KEY,
 	navn	TEXT NOT NULL,
-	kapasitet	INTEGER NOT NULL,
-	PRIMARY KEY(salID)
+	kapasitet	INTEGER NOT NULL
+	
 )''')
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS teaterStykke (
@@ -150,7 +151,6 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS teaterStykke (
 )
 ''')
 
-#cursor.execute('''INSERT INTO akt VALUES (3, 3, 'hei')''')
 
 conn.commit()
 conn.close()
