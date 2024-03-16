@@ -6,10 +6,14 @@ conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 
 
+
+
 cursor.execute('''INSERT INTO sal VALUES (NULL, "Hovedscenen", 516)''')
-
-cursor.execute('''INSERT INTO  teaterStykke VALUES (NULL, "hei", "ola", 1)''')
-
-
 conn.commit()
+
+sal_id = cursor.lastrowid
+
+cursor.execute('''INSERT INTO teaterStykke VALUES (NULL, "Kongsemnene", "Ibsen", ?)''', (sal_id,))
+conn.commit()
+
 conn.close()

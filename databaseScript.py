@@ -13,26 +13,3 @@ conn.commit()
 conn.close()
 
 
-# from sqlite3 import Error
-
-# def create_connection(db_file):
-
-#     conn = None
-#     try:
-#         conn = sqlite3.connect(db_file)
-#         print("noe skjedde")
-
-#         cursor = conn.cursor()
-#         cursor.execute( )
-
-    
-#     except Error as e:
-#         print("Funka ikke")
-#     finally:
-#         if conn:
-#             conn.commit()
-#             conn.close()
-
-
-# if __name__ == '__main__':
-#     create_connection(db_file)
