@@ -18,20 +18,13 @@ conn.commit()
 
 stykke_id = cursor.lastrowid
 
-cursor.execute('''INSERT INTO akt VALUES (?, NULL, "1") ''', (stykke_id))
-conn.commit()
-
-cursor.execute('''INSERT INTO akt VALUES (?, NULL, "2") ''', (stykke_id))
-conn.commit()
-
-cursor.execute('''INSERT INTO akt VALUES (?, NULL, "3") ''', (stykke_id))
-conn.commit()
-
-cursor.execute('''INSERT INTO akt VALUES (?, NULL, "4") ''', (stykke_id))
-conn.commit()
-
-cursor.execute('''INSERT INTO akt VALUES (?, NULL, "5") ''', (stykke_id))
-conn.commit()
+def settInnAktKongsemnene(tittel):
+    for i in range(1, 6):
+        cursor.execute('''INSERT INTO akt VALUES (?, ?, ?) ''', (stykke_id, i, i))
+        print(i)
+        conn.commit()
+    
+settInnAktKongsemnene("Kongsemnene")
 
 def settInnForestilling (start_tid, dato):
     cursor.execute('''INSERT INTO forestilling VALUES (NULL, ?, ?, ?) ''', (start_tid, dato, stykke_id))
@@ -63,67 +56,139 @@ settInnRoller('Peter')
 def setteAnsatte(navn, epost, ansatt_status):
     cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status))
 
-setteAnsatte("Arturo Scotti", "")
+# setteAnsatte("Arturo Scotti", "")
 
 
 filePath = 'hovedscenen.txt'
 
-def setteStolerHovedscenen(filePath):
-    #Åpner filen og leser filen 
-    with open(filePath, 'r') as file:
-        lines = file.readlines()
+# def setteStolerHovedscenen(filePath):
+#     #Åpner filen og leser filen 
+#     with open(filePath, 'r') as file:
+#         lines = file.readlines()
 
-    område = None
-    radNr = 0
-    seteNr = 1   
+#     område = None
+#     radNr = 0
+#     seteNr = 1   
+
+#     for line in lines:
+#         # Ser om vi er i galleri eller parkett området
+#         if 'Galleri' in line:
+#             område = 'Galleri'
+#             radNr = 0
+#             seteNr = 505
+#         elif 'Parkett' in line:
+#             område = 'Parkett'
+#             radNr = 19
+#             seteNr = 505
+        
+#         # Alle andre linjer inneholder data om seter, siden vi starter på toppen må vi telle oss nedover
+#         else:
+#             if område == 'Parkett':
+#                 radNr -= 1
+#                 seteNr = seteNr-28
+#                 if radNr <= 17:
+#                     seteNr = seteNr - 28
+#                     #Må fjerne 28 seter til for at vi skal starte med riktig sete
+#                 for char in line.strip():
+#                     if char in '01x':
+#                         seteNr += 1 
+#                         #Øker seteNr med 1 uansett om det er et sete der eller ikke, i henhold til vedlegget om hovedscenen 
+#                         if char in '01':
+#                             cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?)''', (radNr, seteNr, område, sal_id))
+#                             conn.commit()
+
+#             elif område == 'Galleri':
+#                 radNr += 1
+#                 for char in line.strip():
+#                     if char in '01':
+#                         seteNr += 1
+#                         cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?)''', (radNr, seteNr, område, sal_id))
+#                         conn.commit()
+cursor.execute('''insert into kundegruppe (gruppeid, gruppenavn) values (NULL, "Standardbruker")''')
+gruppeid = cursor.lastrowid
+cursor.execute('''insert into kundeprofil (kundeid, navn, mobilnr, adresse, gruppeid) values (NULL, "Standardbruker", "99999999", "Hovedscenen", ?)''', (gruppeid,))
+conn.commit()
+
+def checkSetup(sal):
+    cursor.execute('''select count(*) = s.kapasitet from plass p, sal s where p.salid = s.salid and s.navn = ?''', (sal,))
+    check = cursor.fetchone()
+    returnvalue = 0 if check[0] == None else check[0]
+    return returnvalue
+
+
+def setupHovedscenen(lines):
+        
+    #Opprett sal i databasen hvis ikke finnes
+
+    cursor.execute('''select salid from sal where navn = "Hovedscenen"''')
+    checkSal = cursor.fetchone()
+
+    if checkSal == None:
+        cursor.execute('''insert into sal (navn, kapasitet) values ("Hovedscenen", 516) returning salid''')
+        salid = cursor.fetchone()[0]
+        conn.commit()
+    else:
+        salid = checkSal[0]
+
+    checkrow = list('01x')
+    rownum = 20
+    seatnum = 515
+    date = None
+    area = None
+    linenum = 1
+    galleriline = 1
 
     for line in lines:
-        # Ser om vi er i galleri eller parkett området
-        if 'Galleri' in line:
-            område = 'Galleri'
-            radNr = 0
-            seteNr = 505
-        elif 'Parkett' in line:
-            område = 'Parkett'
-            radNr = 19
-            seteNr = 505
+        s = set(line.strip())
+        if linenum == 1:
+            date = line.split()[1]
+        elif all(letter not in s for letter in checkrow):
+            area = line.strip()
+        else:                        
+            #seatsinrow = len(s)
+            for x in line.strip():
+                if x == '0' or x == '1':
+                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?)''', (rownum, seatnum, area, salid))
+                    conn.commit()
+                seatnum += 1
+
+            if area == 'Galleri':                
+                if galleriline == 2:
+                    seatnum -= (2*10)
+                    rownum -= 1
+                if galleriline == 4:
+                    seatnum -= (10+28)
+                    rownum -=1
+                galleriline+= 1
+            else:
+                seatnum -= (2*28)
+                rownum -= 1
         
-        # Alle andre linjer inneholder data om seter, siden vi starter på toppen må vi telle oss nedover
-        else:
-            if område == 'Parkett':
-                radNr -= 1
-                seteNr = seteNr-28
-                if radNr <= 17:
-                    seteNr = seteNr - 28
-                    #Må fjerne 28 seter til for at vi skal starte med riktig sete
-                for char in line.strip():
-                    if char in '01x':
-                        seteNr += 1 
-                        #Øker seteNr med 1 uansett om det er et sete der eller ikke, i henhold til vedlegget om hovedscenen 
-                        if char in '01':
-                            cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?)''', (radNr, seteNr, område, sal_id))
-                            conn.commit()
+        linenum += 1
 
-            elif område == 'Galleri':
-                radNr += 1
-                for char in line.strip():
-                    if char in '01':
-                        seteNr += 1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?)''', (radNr, seteNr, område, sal_id))
-                        conn.commit()
+def readHovedscenenSetup(file):
+
+    with open(file, 'r') as f:
+        lines = f.readlines()
+
+    check = checkSetup('Hovedscenen')
+
+    if check == 0:
+        setupHovedscenen(lines)
 
 
+readHovedscenenSetup('hovedscenen.txt')
 
 
 #Denne funksjonen ble ganske krunglete siden vi må starte bakerst i salen og jobbe oss fremover 
 
-cursor.execute('''INSERT INTO sal VALUES (NULL, "Gamle scene", 332)''')
-conn.commit()
+# cursor.execute('''INSERT INTO sal VALUES (NULL, "Gamle scene", 332)''')
+# conn.commit()
 
-sal_id = cursor.lastrowid
+# sal_id = cursor.lastrowid
 
-cursor.execute('''INSERT INTO teaterStykke VALUES (NULL, "Størst av alt er kjærligheten", "Petersen", ?)''', (sal_id))
-conn.commit()
+# cursor.execute('''INSERT INTO teaterStykke VALUES (NULL, "Størst av alt er kjærligheten", "Petersen", ?)''', (sal_id))
+# conn.commit()
 
 filePath = 'gamle-scene.txt'
 
@@ -176,5 +241,6 @@ def setteStolerGamleScene (filePath):
                         seteNr +=1
                         cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
                         conn.commit()   
+
 
 conn.close()

@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS "plass" (
 	"plassID"	INTEGER NOT NULL,
 	"radNR"	INTEGER NOT NULL,
 	"stolNR"	INTEGER NOT NULL,
-	"område"	TEXT,
+	"omraade"	TEXT,
 	"salID"	INTEGER NOT NULL,
 	PRIMARY KEY("plassID"),
 	FOREIGN KEY("salID") REFERENCES "sal"
