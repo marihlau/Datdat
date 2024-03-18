@@ -20,3 +20,5 @@ cursor.execute('''
                ORDER BY(COUNT billet) DESC
                ''')
 
+conn.commit()
+conn.close()
