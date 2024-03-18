@@ -1,6 +1,6 @@
 import sqlite3
 
-db_file = "test.db"  # Legg til riktig filtype for SQLite-databasen
+db_file = "test.db"  
 
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
