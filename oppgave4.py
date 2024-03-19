@@ -19,7 +19,7 @@ def finn_forestillinger_på_dato(dato):
     if resultater:
         print("Forestillinger på", dato, ":")
         for rad in resultater:
-            print("- Fore∏stilling:", rad[0])
+            print("- Forestilling:", rad[0])
             print("  Antall billetter solgt:", rad[1])
     else:
         print("Ingen forestillinger funnet på", dato)
