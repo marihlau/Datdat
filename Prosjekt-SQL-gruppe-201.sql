@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "oppgave" (
 	PRIMARY KEY("oppgaveNavn","stykkeID"),
 	FOREIGN KEY("stykkeID") REFERENCES "teaterStykke"
 );
-CREATE TABLE IF NOT EXISTS "skuespiler" (
+CREATE TABLE IF NOT EXISTS "skuespiller" (
 	"ansattID"	INTEGER NOT NULL,
 	PRIMARY KEY("ansattID"),
 	FOREIGN KEY("ansattID") REFERENCES "ansatt"
@@ -66,18 +66,24 @@ CREATE TABLE IF NOT EXISTS "ansatt" (
 CREATE TABLE IF NOT EXISTS "billett" (
 	"billettID"	INTEGER NOT NULL,
 	"kjopsID"	INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "billett" (
+	"billettID"	INTEGER NOT NULL,
+	"kjopsID"	INTEGER NOT NULL,
 	"forestillingID"	INTEGER NOT NULL,
 	"plassID"	INTEGER NOT NULL,
 	PRIMARY KEY("billettID"),
-	FOREIGN KEY("kjopsID") REFERENCES "billettKjop",
+	FOREIGN KEY("kjopsID") REFERENCES "billetKjop",
 	FOREIGN KEY("plassID") REFERENCES "plass",
 	FOREIGN KEY("forestillingID") REFERENCES "forestilling"
 );
 CREATE TABLE IF NOT EXISTS "billettKjop" (
 	"kjopsID"	INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "billettKjop" (
+	"kjopsID"	INTEGER NOT NULL,
 	"kundeID"	INTEGER NOT NULL,
 	"tid"	INTEGER NOT NULL,
 	"dato"	INTEGER NOT NULL,
+	PRIMARY KEY("kjopsID"),
 	PRIMARY KEY("kjopsID"),
 	FOREIGN KEY("kundeID") REFERENCES "kundeProfil"
 );
