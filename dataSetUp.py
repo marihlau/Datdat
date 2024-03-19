@@ -36,7 +36,7 @@ settInnForestilling(5.2, 19.0)
 settInnForestilling(6.2, 19.0)
 
 def settInnRoller (navn):
-    cursor.execute('''INSERT INTO rolle VALUES (?,?) ''', (navn, stykke_id))
+    cursor.execute('''INSERT INTO rolle VALUES (?,?) ''', (navn, stykke_id,))
 
 settInnRoller('Håkon Håkonson')
 settInnRoller('Dagfinn Bonde')
@@ -54,7 +54,7 @@ settInnRoller('Biskop Nikolas')
 settInnRoller('Peter')
 
 def setteAnsatte(navn, epost, ansatt_status):
-    cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status))
+    cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status,))
 
 # setteAnsatte("Arturo Scotti", "")
 
@@ -62,6 +62,7 @@ cursor.execute('''insert into kundegruppe (gruppeid, gruppenavn) values (NULL, "
 gruppeid = cursor.lastrowid
 cursor.execute('''insert into kundeprofil (kundeid, navn, mobilnr, adresse, gruppeid) values (NULL, "Standardbruker", "99999999", "Hovedscenen", ?)''', (gruppeid,))
 kundeid = cursor.lastrowid
+print(kundeid)
 conn.commit()
 
 def checkSetup(sal):
@@ -103,16 +104,16 @@ def setupHovedscenen(lines):
             #seatsinrow = len(s)
             for x in line.strip():
                 if x == '0':
-                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?)''', (rownum, seatnum, area, salid))
+                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?)''', (rownum, seatnum, area, salid,))
                     conn.commit()
                 elif x == '1':
-                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?) ''', (rownum, seatnum, area, salid))
-                    plassid = cursor.fetchone()[0]
+                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?) ''', (rownum, seatnum, area, salid,))
+                    plassid = cursor.lastrowid
                     conn.commit()
-                    cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid))
+                    cursor.execute(''' insert into billettKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 1438, 1903) ''', (kundeid,))
                     kjopsid = cursor.lastrowid
                     conn.commit()
-                    cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid ))
+                    cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
                     conn.commit()
                 seatnum += 1
 
@@ -149,7 +150,7 @@ conn.commit()
 
 sal_id = cursor.lastrowid
 
-cursor.execute('''INSERT INTO teaterStykke VALUES (NULL, "Størst av alt er kjærligheten", "Petersen", ?)''', (sal_id))
+cursor.execute('''INSERT INTO teaterStykke VALUES (NULL, "Størst av alt er kjærligheten", "Petersen", ?)''', (sal_id,))
 conn.commit()
 
 stykke_id = cursor.lastrowid

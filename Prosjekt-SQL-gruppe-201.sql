@@ -63,9 +63,7 @@ CREATE TABLE IF NOT EXISTS "ansatt" (
 	"ansattStatus"	TEXT NOT NULL,
 	PRIMARY KEY("ansattID")
 );
-CREATE TABLE IF NOT EXISTS "billett" (
-	"billettID"	INTEGER NOT NULL,
-	"kjopsID"	INTEGER NOT NULL,
+
 CREATE TABLE IF NOT EXISTS "billett" (
 	"billettID"	INTEGER NOT NULL,
 	"kjopsID"	INTEGER NOT NULL,
@@ -78,12 +76,9 @@ CREATE TABLE IF NOT EXISTS "billett" (
 );
 CREATE TABLE IF NOT EXISTS "billettKjop" (
 	"kjopsID"	INTEGER NOT NULL,
-CREATE TABLE IF NOT EXISTS "billettKjop" (
-	"kjopsID"	INTEGER NOT NULL,
 	"kundeID"	INTEGER NOT NULL,
 	"tid"	INTEGER NOT NULL,
 	"dato"	INTEGER NOT NULL,
-	PRIMARY KEY("kjopsID"),
 	PRIMARY KEY("kjopsID"),
 	FOREIGN KEY("kundeID") REFERENCES "kundeProfil"
 );
