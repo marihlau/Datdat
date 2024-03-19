@@ -20,7 +20,7 @@ stykke_id = cursor.lastrowid
 
 def settInnAktKongsemnene(tittel):
     for i in range(1, 6):
-        cursor.execute('''INSERT INTO akt VALUES (?, ?, ?) ''', (stykke_id, i, i))
+        cursor.execute('''INSERT INTO akt VALUES (?, ?, ?) ''', (stykke_id, i, i,))
         conn.commit()
     
 settInnAktKongsemnene("Kongsemnene")
@@ -196,17 +196,17 @@ def setteStolerGamleScene (filePath):
                 for char in line.strip():
                     if char == '0':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))
                         conn.commit()
                     elif char == '1':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))
                         plassid = cursor.fetchone()[0]
                         conn.commit()
-                        cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid))
+                        cursor.execute(''' insert into billettKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid,))
                         kjopsid = cursor.lastrowid
                         conn.commit()
-                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid ))
+                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
                         conn.commit()
             elif område == 'Balkong':
                 radNr -=1
@@ -214,17 +214,17 @@ def setteStolerGamleScene (filePath):
                 for char in line.strip():
                     if char == '0':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))  
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))  
                         conn.commit()
                     elif char == '1':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))
                         plassid = cursor.fetchone()[0]
                         conn.commit()
-                        cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid))
+                        cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid,))
                         kjopsid = cursor.lastrowid
                         conn.commit()
-                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid ))
+                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
                         conn.commit()
             elif område == 'Parkett':
                 radNr -=1
@@ -232,16 +232,16 @@ def setteStolerGamleScene (filePath):
                 for char in line.strip():
                     if char == '0':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))
                         conn.commit()   
                     elif char == '1':
                         seteNr +=1
-                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id))
+                        cursor.execute('''INSERT INTO plass (NULL, ?, ?, ?, ?) ''', (radNr, seteNr, område, sal_id,))
                         plassid = cursor.fetchone()[0]
                         conn.commit()
-                        cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid))
+                        cursor.execute(''' insert into blittKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 19-03, 14-38) ''', (kundeid,))
                         kjopsid = cursor.lastrowid
                         conn.commit()
-                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid ))
+                        cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
                         conn.commit()
 conn.close()
