@@ -63,22 +63,22 @@ CREATE TABLE IF NOT EXISTS "ansatt" (
 	"ansattStatus"	TEXT NOT NULL,
 	PRIMARY KEY("ansattID")
 );
-CREATE TABLE IF NOT EXISTS "billet" (
-	"billetID"	INTEGER NOT NULL,
-	"kjøpsID"	INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "billett" (
+	"billettID"	INTEGER NOT NULL,
+	"kjopsID"	INTEGER NOT NULL,
 	"forestillingID"	INTEGER NOT NULL,
 	"plassID"	INTEGER NOT NULL,
-	PRIMARY KEY("billetID"),
-	FOREIGN KEY("kjøpsID") REFERENCES "billetKjøp",
+	PRIMARY KEY("billettID"),
+	FOREIGN KEY("kjopsID") REFERENCES "billettKjop",
 	FOREIGN KEY("plassID") REFERENCES "plass",
 	FOREIGN KEY("forestillingID") REFERENCES "forestilling"
 );
-CREATE TABLE IF NOT EXISTS "billetKjøp" (
-	"kjøpsID"	INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "billettKjop" (
+	"kjopsID"	INTEGER NOT NULL,
 	"kundeID"	INTEGER NOT NULL,
 	"tid"	INTEGER NOT NULL,
 	"dato"	INTEGER NOT NULL,
-	PRIMARY KEY("kjøpsID"),
+	PRIMARY KEY("kjopsID"),
 	FOREIGN KEY("kundeID") REFERENCES "kundeProfil"
 );
 CREATE TABLE IF NOT EXISTS "forestilling" (
