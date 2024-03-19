@@ -21,7 +21,6 @@ stykke_id = cursor.lastrowid
 def settInnAktKongsemnene(tittel):
     for i in range(1, 6):
         cursor.execute('''INSERT INTO akt VALUES (?, ?, ?) ''', (stykke_id, i, i))
-        print(i)
         conn.commit()
     
 settInnAktKongsemnene("Kongsemnene")
