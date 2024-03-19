@@ -20,7 +20,7 @@ DROP TABLE IF EXISTS "ansatt";
 
 DROP TABLE IF EXISTS "billett";
 
-DROP TABLE IF EXISTS "billettKjøp";
+DROP TABLE IF EXISTS "billettKjop";
 
 DROP TaBLE IF EXISTs "forestilling";
 
