@@ -66,7 +66,7 @@ settOppkanSeKongsemnene()
 def settInnRoller (navn):
     cursor.execute('''INSERT INTO rolle VALUES (?,?) ''', (navn, stykke_id,))
 
-settInnRoller('Håkon Håkonson')
+settInnRoller('Håkon Håkonsønn')
 settInnRoller('Dagfinn Bonde')
 settInnRoller('Jatgeir Skald')
 settInnRoller('Sigrid')
@@ -75,7 +75,7 @@ settInnRoller('Trønder') #byttet fra oppgaven til det som sto på nettsiden
 settInnRoller('Skule Jarl')
 settInnRoller('Inga frå Vartejg')
 settInnRoller('Paal Flida')
-settInnRoller('Ragnhild')
+settInnRoller('Fru Ragnhild')
 settInnRoller('Gregorius Jonssønn')
 settInnRoller('Margrete')
 settInnRoller('Biskop Nikolas')
@@ -92,42 +92,73 @@ def setteSkuespiller(ansattID):
     else:
         print("Fant ikke ansattID")
 
+def spillerRolle(ansattID, rolleNavn):
+    cursor.execute('''INSERT INTO spillerRolle VALUES (?, ?, ?) ''', (ansattID, stykke_id, rolleNavn))
+
 #Setter inn skuespillere først som ansatte før vi henter ansattID og setter inn i skuespiller-tabellen
 setteAnsatte('Arturo Scotti', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Håkon Håkonsønn')
 conn.commit()
 setteAnsatte('Ingunn Beate Strige Øyen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Inga frå Vartejg')
 conn.commit()
 setteAnsatte('Hans Petter Nilsen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Skule Jarl') 
 conn.commit()
 setteAnsatte('Madeleine Brandtzæg Nilsen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Fru Ragnhild')
 conn.commit()
 setteAnsatte('Synnøve Fossum Eriksen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Margrete')
 conn.commit()
 setteAnsatte('Emma Caroline Deichmann', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Sigrid')
+spillerRolle(ansattID, 'Ingebjørg')
 conn.commit()
 setteAnsatte('Thomas Jensen Takyi', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Biskop Nikolas')
 conn.commit()
 setteAnsatte('Per Bogstad Gulliksen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Gregorius Jonssønn')
 conn.commit()
 setteAnsatte('Isak Holmen Sørensen', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Paal Flida')
+spillerRolle(ansattID, 'Trønder')
 conn.commit()
 setteAnsatte('Fabian Heideberg Lunde', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Baard Bratte')
+spillerRolle(ansattID, 'Trønder')
 conn.commit()
 setteAnsatte('Emil Olafsson', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Dagfinn Bonde')
+spillerRolle(ansattID, 'Jatgeir Skald')
 conn.commit()
 setteAnsatte('Snorre Ryen Tøndel', None, 'heltid')
-setteSkuespiller(cursor.lastrowid)
+ansattID = cursor.lastrowid
+setteSkuespiller(ansattID)
+spillerRolle(ansattID, 'Peter')
 conn.commit()
 
 def settOppgave(oppgaveNavn):
@@ -163,6 +194,29 @@ setteAnsatte('Mina Rype Stokke', None, 'heltid')
 ansattID = cursor.lastrowid
 giAnsattOppgave(ansattID, 'Dramaturg')
 conn.commit()
+
+    
+def settRolleTilAkt(aktNummer, rolleNavn):
+    cursor.execute('''INSERT INTO erIAkt VALUES (?, ?, ?) ''', (aktNummer, rolleNavn, stykke_id,))
+
+rolle_er_i_akt_oversikt = {
+    'Håkon Håkonsønn': [1, 2, 3, 4, 5],
+    'Dagfinn Bonde': [1, 2, 3, 4, 5],
+    'Jatgeir Skald': [4],
+    'Sigrid': [1, 2, 5],
+    'Ingebjørg': [4],
+    'Skule Jarl': [1, 2, 3, 4, 5],
+    'Inga frå Vartejg': [1, 3],
+    'Paal Flida': [1, 2, 3, 4, 5],
+    'Ragnhild': [1, 5],
+    'Gregorius Jonsson': [1, 2, 3, 4, 5],
+    'Margrete': [1, 2, 3, 4, 5],
+    'Biskop Nikolas': [1, 2, 3],
+    'Peter': [3, 4, 5]
+}
+for rolle, akt in rolle_er_i_akt_oversikt.items():
+    for aktNummer in akt:
+        settRolleTilAkt(aktNummer, rolle)
 
 def sjekkSetup(sal):
     cursor.execute('''select count(*) = s.kapasitet from plass p, sal s where p.salid = s.salid and s.navn = ?''', (sal,))
