@@ -68,7 +68,7 @@ def findAvalibleSeats(stykkeNavn, dato, antallSeter, mobilnr):
             print("Fant ikke pris")
         pris = billetpris * antallSeter
 
-    conn.close()
+    
 
     if raderMedLedigeSeter:
         print(f'Rader med {antallSeter} eller flere ledige seter for {stykkeNavn} med en pris på {pris}kr')
@@ -77,13 +77,40 @@ def findAvalibleSeats(stykkeNavn, dato, antallSeter, mobilnr):
     else:
         print(f'Fant ingen rader med {antallSeter} ledige seter for {stykkeNavn} på datoen {dato}')
     
-    #if forestillingID:
-        #cursor.execute('''SELECT plassID FROM billett WHERE forestillingID = ?''', (forestillingID[0],))
-        #plassid = cursor.fetchall()
-        #print("plassid:", plassid)
-        #print("Number of available seats:", len(plassid))
-    #else:
-        #print("No forestillingID found for the given criteria.")
+    #Sjekker om kundebrukeren eksisterer
+    cursor.execute(''' SELECT mobilNR, kundeID
+                   FROM kundeProfil
+                   ''')
+    
+    resultat=cursor.fetchall()
+    if(resultat):
+        for row in resultat:
+            if(row[0]==mobilnr):
+                print("Kundeprofilen finnes i databasen")
+                kundeID=row[1]
+    else: print("Finner ingen mobilNr i tabellen")
+
+#Registrerer billettkjøp
+    cursor.execute(''' INSERT INTO billettKjop (kjopsid, kundeid, tid, dato) 
+                   VALUES (NULL,?,1900, 21.3 )
+                   ''', (kundeID,))
+    kjopsID = cursor.lastrowid
+    conn.commit()
+    
+    for i in range(antallSeter +1):
+        cursor.execute('''SELECT plassID
+                            FROM plass
+                            WHERE radNR = 1 AND stolNR = ? AND omraade = "Balkong"
+                            ''',(i,))
+        seter = cursor.fetchall()
+        
+        for row in seter:
+            cursor.execute('''INSERT INTO billett VALUES (NULL, ?, ?, ? ) ''', (kjopsID, forestillingID, row[0]))
+            conn.commit()
+
+    
+    conn.close()
+
 
 findAvalibleSeats("Størst av alt er kjærligheten", 3.2, 9, 99999999) #skal returnere 2 seter
 
