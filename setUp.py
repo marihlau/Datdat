@@ -5,8 +5,8 @@ db_file = "TrondelagTeater.db"  # Legg til riktig filtype for SQLite-databasen
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 
-with open('drop_all_tables.sql') as drop_tables: #fjerner alle tabellene.
-    sql_script = drop_tables.read()
+with open('fjern_alle_tabeller.sql') as fjern_tabeller: #fjerner alle tabellene.
+    sql_script = fjern_tabeller.read()
     
 cursor.executescript(sql_script)
 conn.commit()
