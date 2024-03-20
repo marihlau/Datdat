@@ -92,13 +92,13 @@ def setteSkuespiller(ansattID):
     else:
         print("Fant ikke ansattID")
 
-setteAnsatte('Arturo Scotti', NULL, 'heltid')
+setteAnsatte('Arturo Scotti', None, 'heltid')
 setteSkuespiller(cursor.lastrowid)
 conn.commit()
-setteAnsatte('Ingunn Beate Strige Øyen', NULL, 'heltid')
+setteAnsatte('Ingunn Beate Strige Øyen', None, 'heltid')
 setteSkuespiller(cursor.lastrowid)
 conn.commit()
-setteAnsatte('Hans Petter Nilsen', NULL, 'heltid')
+setteAnsatte('Hans Petter Nilsen', None, 'heltid')
 setteSkuespiller(cursor.lastrowid)
 conn.commit()
 

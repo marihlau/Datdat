@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS "akt" (
 CREATE TABLE IF NOT EXISTS "ansatt" (
 	"ansattID"	INTEGER NOT NULL,
 	"navn"	TEXT NOT NULL,
-	"epost"	TEXT NOT NULL UNIQUE,
+	"epost"	TEXT UNIQUE,
 	"ansattStatus"	TEXT NOT NULL,
 	PRIMARY KEY("ansattID")
 );
