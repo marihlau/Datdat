@@ -17,10 +17,9 @@ def finn_forestillinger_på_dato(dato):
     resultater = cursor.fetchall()
 
     if resultater:
-        print("Forestillinger på", dato, ":")
+        print("Forestillinger som spilles på", dato, ":")
         for rad in resultater:
-            print("- Forestilling:", rad[0])
-            print("  Antall billetter solgt:", rad[1])
+            print("  Til forestillingen,", rad[0], ", ble det solgt", rad[1], "billetter")
     else:
         print("Ingen forestillinger funnet på", dato)
 

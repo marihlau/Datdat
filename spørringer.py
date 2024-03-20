@@ -1,41 +1,9 @@
 import sqlite3
 
-db_file = "test.db"  
+db_file = "TrondelagTeater.db"  
 
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
-
-cursor.execute(''' INSERT INTO teaterStykke 
-               VALUES(9, "Kongsemnene", "Ibsen", 9)
-               ''')
-cursor.execute(''' INSERT INTO teaterStykke 
-               VALUES(7, "Størst av alt er kjærligheten", "Petersen", 7)
-               ''')
-cursor.execute(''' INSERT INTO spillerRolle
-               VALUES (9, 9, "kongen")
-               ''')
-
-cursor.execute(''' INSERT INTO ansatt
-               VALUES (9, "ola","ole@gmail.com", "deltid" )
-               ''')
-
-cursor.execute(''' INSERT INTO forestilling
-               VALUES (9, 18, 19, 9)
-               ''')
-cursor.execute(''' INSERT INTO forestilling
-               VALUES (7, 18, 19, 7)
-               ''')
-
-cursor.execute(''' INSERT INTO billett
-               VALUES (9, 9, 9, 9)
-               ''')
-cursor.execute(''' INSERT INTO billett
-               VALUES (7, 9, 9, 9)
-               ''')
-cursor.execute(''' INSERT INTO billett
-               VALUES (8, 9, 7, 9)
-               ''')
-
 
 cursor.execute(''' 
                SELECT DISTINCT teaterStykke.navn, spillerRolle.navn, ansatt.navn
