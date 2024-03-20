@@ -241,37 +241,36 @@ def setupHovedscenen(lines):
     #Opprett sal i databasen hvis ikke finnes
 
     cursor.execute('''select salid from sal where navn = "Hovedscenen"''')
-    checkSal = cursor.fetchone()
+    sjekkSal = cursor.fetchone()
 
-    if checkSal == None:
+    if sjekkSal == None:
         cursor.execute('''insert into sal (navn, kapasitet) values ("Hovedscenen", 516) returning salid''')
         salid = cursor.fetchone()[0]
         conn.commit()
     else:
-        salid = checkSal[0]
+        salid = sjekkSal[0]
 
-    checkrow = list('01x')
-    rownum = 20
-    seatnum = 515
-    date = None
-    area = None
+    sjekkrad = list('01x')
+    radnr = 20
+    setenr = 515
+    dato = None
+    omraade = None
     linenum = 1
     galleriline = 1
 
     for line in lines:
         s = set(line.strip())
         if linenum == 1:
-            date = line.split()[1]
-        elif all(letter not in s for letter in checkrow):
-            area = line.strip()
+            dato = line.split()[1]
+        elif all(letter not in s for letter in sjekkrad):
+            omraade = line.strip()
         else:                        
-            #seatsinrow = len(s)
             for x in line.strip():
                 if x == '0':
-                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?)''', (rownum, seatnum, area, salid,))
+                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?)''', (radnr, setenr, omraade, salid,))
                     conn.commit()
                 elif x == '1':
-                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?) ''', (rownum, seatnum, area, salid,))
+                    cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?) ''', (radnr, setenr, omraade, salid,))
                     plassid = cursor.lastrowid
                     conn.commit()
                     cursor.execute(''' insert into billettKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 14.38, 19.03) ''', (kundeid,))
@@ -279,19 +278,19 @@ def setupHovedscenen(lines):
                     conn.commit()
                     cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
                     conn.commit()
-                seatnum += 1
+                setenr += 1
 
-            if area == 'Galleri':                
+            if omraade == 'Galleri':                
                 if galleriline == 2:
-                    seatnum -= (2*10)
-                    rownum -= 1
+                    setenr -= (2*10)
+                    radnr -= 1
                 if galleriline == 4:
-                    seatnum -= (10+28)
-                    rownum -=1
+                    setenr -= (10+28)
+                    radnr -=1
                 galleriline+= 1
             else:
-                seatnum -= (2*28)
-                rownum -= 1
+                setenr -= (2*28)
+                radnr -= 1
         
         linenum += 1
 
