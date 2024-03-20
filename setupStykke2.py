@@ -66,20 +66,128 @@ cursor.execute('''SELECT kundeID FROM kundeProfil WHERE navn = ?''', ("Standardb
 sjekkStandardbruker = cursor.fetchone()
 if sjekkStandardbruker:
     kundeid = sjekkStandardbruker[0]
+
 #Henter ut forestillingID for en abitrær forestilling av Størst av alt er kjærligheten
 cursor.execute('''SELECT forestillingID FROM forestilling WHERE stykkeID = ?''', (stykke_id,))
 sjekForestilling = cursor.fetchone()
 if sjekForestilling:
     forestillingID = sjekForestilling[0]
 
-filePath = 'gamle-scene.txt'
+#Funksjon som setter inn roller
+def settInnRoller (navn):
+    cursor.execute('''INSERT INTO rolle VALUES (?,?) ''', (navn, stykke_id,))
 
-cursor.execute('''insert into kundegruppe (gruppeid, gruppenavn) values (NULL, "Standardbruker")''')
-gruppeid = cursor.lastrowid
-cursor.execute('''insert into kundeprofil (kundeid, navn, mobilnr, adresse, gruppeid) values (NULL, "Standardbruker", "99999991", "Hovedscenen", ?)''', (gruppeid,))
-kundeid = cursor.lastrowid
+#Rollene som blir satt inn
+settInnRoller('Sunniva Du Mond Nordal')
+settInnRoller('Jo Saberniak')
+settInnRoller('Marte M. Steinholt')
+settInnRoller('Tor Ivar Hagen')
+settInnRoller('Trond-Ove Skrødal')
+settInnRoller('Natalie Grøndahl Tangen')
+settInnRoller('Åsmund Flaten')
 conn.commit()
 
+#Funksjon som setter inn ansatte
+def setteAnsatte(navn, epost, ansatt_status):
+    cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status,))
+
+#Funksjon som setter inn skuespillere
+def setteSkuespiller(ansattID):
+    if ansattID:
+        cursor.execute('''INSERT INTO skuespiller VALUES (?) ''', (ansattID,))
+    else:
+        print("Fant ikke ansattID")
+
+#Funksjon som setter inn i spillerRolle tabellen
+def settSpillerRolle(ansattID, rolleNavn):
+    cursor.execute('''INSERT INTO spillerRolle VALUES (?,?,?)''', (ansattID, stykke_id, rolleNavn,))
+
+#Setter inn verdiene for ansatte som er skuespillere
+setteAnsatte('Sunniva Du Mond Nordal', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid, 'Sunniva Du Mond Nordal')
+conn.commit()
+setteAnsatte('Jo Saberniak', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid, 'Jo Saberniak')
+conn.commit()
+setteAnsatte('Marte M. Steinholt', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid,'Marte M. Steinholt' )
+conn.commit()
+setteAnsatte('Tor Ivar Hagen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid, 'Tor Ivar Hagen')
+conn.commit()
+setteAnsatte('Trond-Ove Skrødal', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid, 'Trond-Ove Skrødal')
+conn.commit()
+setteAnsatte('Natalie Grøndahl Tangen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid,'Natalie Grøndahl Tangen' )
+conn.commit()
+setteAnsatte('Åsmund Flaten', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+settSpillerRolle(cursor.lastrowid, 'Åsmund Flaten')
+conn.commit()
+
+#Funksjon som setter inn i erIAkt tabellen
+def settErIAkt(aktNR, navn):
+    cursor.execute('''INSERT INTO erIAkt VALUES (?,?,?)''',(aktNR, navn, stykke_id,))
+
+#Setter inn verdier i erIAkt
+settErIAkt(1,'Sunniva Du Mond Nordal')
+settErIAkt(1,'Jo Saberniak')
+settErIAkt(1,'Marte M. Steinholt')
+settErIAkt(1,'Tor Ivar Hagen' )
+settErIAkt(1, 'Trond-Ove Skrødal')
+settErIAkt(1, 'Natalie Grøndahl Tangen')
+settErIAkt(1,'Åsmund Flaten' )
+conn.commit()
+
+#Funksjon som setter inn oppgaver
+def settOppgave(oppgaveNavn):
+    cursor.execute('''INSERT INTO oppgave VALUES (?,?)''', (oppgaveNavn, stykke_id,))
+
+#Setter inn oppgaver
+settOppgave('Regi')
+settOppgave('Scenografi')
+settOppgave('Kostymer')
+settOppgave('Musikalsk ansvarlig')
+settOppgave('Lysdesign')
+settOppgave('Dramaturg')
+conn.commit()
+
+#Funksjon som setter inn i harOppgave tabellen
+def settHarOppgave(ansattID, oppgaveNavn):
+    cursor.execute('''INSERT INTO harOppgave VALUES (?,?,?)''', (ansattID, oppgaveNavn, stykke_id,))
+
+#Setter inn verdier for ansatte som har andre oppgaver enn skuespillere, og tilegner dem oppgaven
+setteAnsatte('Jonas Corell Petersen', None, 'heltid')
+ansattID = cursor.lastrowid
+settHarOppgave(ansattID, 'Regi')
+conn.commit()
+setteAnsatte('David Gehrt', None, 'heltid')
+ansattID = cursor.lastrowid
+settHarOppgave(ansattID, 'Scenograf')
+settHarOppgave(ansattID, 'Kostymer')
+conn.commit()
+setteAnsatte('Gaute Tønder', None, 'heltid')
+ansattID = cursor.lastrowid
+settHarOppgave(ansattID, 'Musikalsk ansvarlig')
+conn.commit()
+setteAnsatte('Magnus Mikaelsen', None, 'heltid')
+ansattID = cursor.lastrowid
+settHarOppgave(ansattID, 'Lysdesign')
+conn.commit()
+setteAnsatte('Kristoffer Spender', None, 'heltid')
+ansattID = cursor.lastrowid
+settHarOppgave(ansattID, 'Dramaturg')
+conn.commit()
+
+filePath = 'gamle-scene.txt'
+#Setter inn stolene på gamle scene
 def setteStolerGamleScene (filePath):
     #Åpner filen og leser filen 
     with open(filePath, 'r') as file:
