@@ -2,6 +2,7 @@ BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "kanSe" (
 	"gruppeID"	INTEGER NOT NULL,
 	"stykkeID"	INTEGER NOT NULL,
+	"pris"	INTEGER,
 	PRIMARY KEY("gruppeID","stykkeID"),
 	FOREIGN KEY("stykkeID") REFERENCES "teaterStykke",
 	FOREIGN KEY("gruppeID") REFERENCES "kundeGruppe"

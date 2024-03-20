@@ -1,5 +1,5 @@
 import sqlite3
-
+kundegrupper = ["ordinær", "honnør", "student", "barn"]
 db_file = "TrondelagTeater.db"  # Legg til riktig filtype for SQLite-databasen
 
 conn = sqlite3.connect(db_file)
@@ -30,10 +30,38 @@ def settInnForestilling (start_tid, dato):
 
 settInnForestilling(1900, 1.2)
 settInnForestilling(1900, 2.2)
-settInnForestilling(1900, 2.2)
+settInnForestilling(1900, 3.2)
 settInnForestilling(1900, 5.2)
 settInnForestilling(1900, 6.2)
-forestillingID = cursor.lastrowid
+
+conn.commit()
+
+def settOppkanSeKongsemnene():
+
+    cursor.execute('''SELECT stykkeID FROM teaterStykke WHERE navn = ?''', ("Kongsemnene",))
+    SjekkstykkeID = cursor.fetchone()
+    if SjekkstykkeID:
+        stykkeID = SjekkstykkeID[0]
+    else:
+        print("Fant ikke stykkeID")
+
+    for gruppe in kundegrupper:
+        
+        cursor.execute('''SELECT gruppeID FROM kundeGruppe WHERE gruppenavn = ?''', (gruppe,))
+        sjekkgruppeID = cursor.fetchone()
+        if sjekkgruppeID:
+            gruppeID = sjekkgruppeID[0]
+        else:
+            print("Fant ikke gruppeID")
+        
+        if gruppe == "ordinær":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 450)''', (gruppeID, stykkeID,))
+        elif gruppe == "honnør":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 380)''', (gruppeID, stykkeID,))
+        elif gruppe == "student":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 280)''', (gruppeID, stykkeID,))
+
+settOppkanSeKongsemnene()
 
 def settInnRoller (navn):
     cursor.execute('''INSERT INTO rolle VALUES (?,?) ''', (navn, stykke_id,))
@@ -53,23 +81,29 @@ settInnRoller('Margrete')
 settInnRoller('Biskop Nikolas')
 settInnRoller('Peter')
 
+conn.commit()
+
 def setteAnsatte(navn, epost, ansatt_status):
     cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status,))
 
-# setteAnsatte("Arturo Scotti", "")
 
-cursor.execute('''insert into kundegruppe (gruppeid, gruppenavn) values (NULL, "Standardbruker")''')
-gruppeid = cursor.lastrowid #NOE FEIL??
-cursor.execute('''insert into kundeprofil (kundeid, navn, mobilnr, adresse, gruppeid) values (NULL, "Standardbruker", "99999999", "Hovedscenen", ?)''', (gruppeid,))
-kundeid = cursor.lastrowid
-print(kundeid)
-conn.commit()
 
 def checkSetup(sal):
     cursor.execute('''select count(*) = s.kapasitet from plass p, sal s where p.salid = s.salid and s.navn = ?''', (sal,))
     check = cursor.fetchone()
     returnvalue = 0 if check[0] == None else check[0]
     return returnvalue
+
+#Henter ut info om standarbruker:
+cursor.execute('''SELECT kundeID FROM kundeProfil WHERE navn = ?''', ("Standardbruker",))  
+sjekkStandardbruker = cursor.fetchone()
+if sjekkStandardbruker:
+    kundeid = sjekkStandardbruker[0]
+#Henter ut forestillingID for en abitrær forestilling av Kongsemnene
+cursor.execute('''SELECT forestillingID FROM forestilling WHERE stykkeID = ?''', (stykke_id,))
+sjekForestilling = cursor.fetchone()
+if sjekForestilling:
+    forestillingID = sjekForestilling[0]
 
 
 def setupHovedscenen(lines):

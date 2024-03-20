@@ -2,7 +2,7 @@ import sqlite3
 
 def finn_forestillinger_på_dato(dato):
 
-    db_file = "test.db"  
+    db_file = "TrondelagTeater.db"  
     conn = sqlite3.connect(db_file)
     cursor = conn.cursor()
 
@@ -26,5 +26,5 @@ def finn_forestillinger_på_dato(dato):
 
     conn.close()
 
-dato = input("Vennligst skriv inn datoen (YYYY-MM-DD): ")
+dato = input("Vennligst skriv inn datoen (D.M): ")
 finn_forestillinger_på_dato(dato)

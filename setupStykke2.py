@@ -1,5 +1,5 @@
 import sqlite3
-
+kundegrupper = ["ordinær", "honnør", "student", "barn"]
 db_file = "TrondelagTeater.db"  # Legg til riktig filtype for SQLite-databasen
 
 conn = sqlite3.connect(db_file)
@@ -30,13 +30,54 @@ settInnForestilling(1830, 13.2)
 settInnForestilling(1830, 14.2)
 forestillingID = cursor.lastrowid
 
+conn.commit()
+
+def  settOppkanSeStorstAvAlt():
+
+    cursor.execute('''SELECT stykkeID FROM teaterStykke WHERE navn = ?''', ("Størst av alt er kjærligheten",))
+    SjekkstykkeID = cursor.fetchone()
+    if SjekkstykkeID:
+        stykkeID = SjekkstykkeID[0]
+    else:
+        print("Fant ikke stykkeID")
+
+    for gruppe in kundegrupper:
+        
+        cursor.execute('''SELECT gruppeID FROM kundeGruppe WHERE gruppenavn = ?''', (gruppe,))
+        sjekkgruppeID = cursor.fetchone()
+        if sjekkgruppeID:
+            gruppeID = sjekkgruppeID[0]
+        else:
+            print("Fant ikke gruppeID")
+        if gruppe == "ordinær":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 350)''', (gruppeID, stykkeID,))
+        elif gruppe == "honnør":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 300)''', (gruppeID, stykkeID,))
+        elif gruppe == "student":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 220)''', (gruppeID, stykkeID,))
+        elif gruppe == "barn":
+            cursor.execute('''INSERT INTO kanSe VALUES (?, ?, 220)''', (gruppeID, stykkeID,))
+
+settOppkanSeStorstAvAlt()
+conn.commit()
+
+#Henter ut info om standarbruker:
+cursor.execute('''SELECT kundeID FROM kundeProfil WHERE navn = ?''', ("Standardbruker",))  
+sjekkStandardbruker = cursor.fetchone()
+if sjekkStandardbruker:
+    kundeid = sjekkStandardbruker[0]
+#Henter ut forestillingID for en abitrær forestilling av Størst av alt er kjærligheten
+cursor.execute('''SELECT forestillingID FROM forestilling WHERE stykkeID = ?''', (stykke_id,))
+sjekForestilling = cursor.fetchone()
+if sjekForestilling:
+    forestillingID = sjekForestilling[0]
+
 filePath = 'gamle-scene.txt'
 
 cursor.execute('''insert into kundegruppe (gruppeid, gruppenavn) values (NULL, "Standardbruker")''')
 gruppeid = cursor.lastrowid
 cursor.execute('''insert into kundeprofil (kundeid, navn, mobilnr, adresse, gruppeid) values (NULL, "Standardbruker", "99999991", "Hovedscenen", ?)''', (gruppeid,))
 kundeid = cursor.lastrowid
-print(kundeid)
 conn.commit()
 
 def setteStolerGamleScene (filePath):
