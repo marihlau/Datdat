@@ -92,6 +92,7 @@ def setteSkuespiller(ansattID):
     else:
         print("Fant ikke ansattID")
 
+#Setter inn skuespillere først som ansatte før vi henter ansattID og setter inn i skuespiller-tabellen
 setteAnsatte('Arturo Scotti', None, 'heltid')
 setteSkuespiller(cursor.lastrowid)
 conn.commit()
@@ -101,10 +102,69 @@ conn.commit()
 setteAnsatte('Hans Petter Nilsen', None, 'heltid')
 setteSkuespiller(cursor.lastrowid)
 conn.commit()
+setteAnsatte('Madeleine Brandtzæg Nilsen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Synnøve Fossum Eriksen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Emma Caroline Deichmann', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Thomas Jensen Takyi', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Per Bogstad Gulliksen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Isak Holmen Sørensen', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Fabian Heideberg Lunde', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Emil Olafsson', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Snorre Ryen Tøndel', None, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
 
+def settOppgave(oppgaveNavn):
+    cursor.execute('''INSERT INTO oppgave VALUES (?, ?) ''', (oppgaveNavn, stykke_id,))
+#Setter inn oppgaver funnet på nettsiden under kunstnerisk lag
+settOppgave('Regi')
+settOppgave('Musikkutvelgelse')
+settOppgave('Scenografi')
+settOppgave('Kostymer')
+settOppgave('Lysdesign')
+settOppgave('Dramaturg')
+conn.commit()
 
+def giAnsattOppgave(ansattID, oppgaveNavn):
+    cursor.execute('''INSERT INTO harOppgave VALUES (?, ?, ?) ''', (ansattID, oppgaveNavn, stykke_id))
 
-def checkSetup(sal):
+#Setter inn ansatte som har andre oppgaver enn skuespiller og kobler de til oppgave
+setteAnsatte('Yury Butusov', None, 'heltid')
+ansattID = cursor.lastrowid
+giAnsattOppgave(ansattID, 'Regi')
+giAnsattOppgave(ansattID, 'Musikkutvelgelse')
+conn.commit()
+setteAnsatte('Aleksandr Shishkin-Hokusai', None, 'heltid')
+ansattID = cursor.lastrowid
+giAnsattOppgave(ansattID, 'Scenografi')
+giAnsattOppgave(ansattID, 'Kostymer')
+conn.commit()
+setteAnsatte('Eivind Myren', None, 'heltid')
+ansattID = cursor.lastrowid
+giAnsattOppgave(ansattID, 'Lysdesign')
+conn.commit()
+setteAnsatte('Mina Rype Stokke', None, 'heltid')
+ansattID = cursor.lastrowid
+giAnsattOppgave(ansattID, 'Dramaturg')
+conn.commit()
+
+def sjekkSetup(sal):
     cursor.execute('''select count(*) = s.kapasitet from plass p, sal s where p.salid = s.salid and s.navn = ?''', (sal,))
     check = cursor.fetchone()
     returnvalue = 0 if check[0] == None else check[0]
@@ -186,7 +246,7 @@ def readHovedscenenSetup(file):
     with open(file, 'r') as f:
         lines = f.readlines()
 
-    check = checkSetup('Hovedscenen')
+    check = sjekkSetup('Hovedscenen')
 
     if check == 0:
         setupHovedscenen(lines)
