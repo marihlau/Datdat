@@ -86,6 +86,22 @@ conn.commit()
 def setteAnsatte(navn, epost, ansatt_status):
     cursor.execute('''INSERT INTO ansatt VALUES (NULL, ?, ?, ?) ''', (navn, epost, ansatt_status,))
 
+def setteSkuespiller(ansattID):
+    if ansattID:
+        cursor.execute('''INSERT INTO skuespiller VALUES (?) ''', (ansattID,))
+    else:
+        print("Fant ikke ansattID")
+
+setteAnsatte('Arturo Scotti', NULL, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Ingunn Beate Strige Øyen', NULL, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+setteAnsatte('Hans Petter Nilsen', NULL, 'heltid')
+setteSkuespiller(cursor.lastrowid)
+conn.commit()
+
 
 
 def checkSetup(sal):
