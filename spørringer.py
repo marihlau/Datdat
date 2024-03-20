@@ -1,6 +1,6 @@
 import sqlite3
 
-db_file = "test.db"  
+db_file = "TrondelagTeater.db"  
 
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
