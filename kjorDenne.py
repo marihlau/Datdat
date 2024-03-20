@@ -8,7 +8,7 @@ filer_i_rekkefolge = [
 ]
 
 for fil in filer_i_rekkefolge:
-    process = subprocess.Popen(["python", fil], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process = subprocess.Popen(["python3", fil], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     return_code = process.wait()
     
