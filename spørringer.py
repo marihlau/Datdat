@@ -21,7 +21,7 @@ cursor.execute('''
                SELECT teaterstykke.navn, forestilling.dato , COUNT (billett.billettID) AS antallBiletter
                FROM (forestilling JOIN teaterstykke ON forestilling.stykkeID=teaterstykke.stykkeID)
                JOIN billett ON billett.forestillingID=forestilling.forestillingID
-               GROUP BY teaterstykke.navn, forestilling.dato
+               GROUP BY teaterstykke.navn
                ORDER BY antallBiletter DESC
                ''')
 
