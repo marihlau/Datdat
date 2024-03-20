@@ -273,7 +273,7 @@ def setupHovedscenen(lines):
                     cursor.execute('''insert into plass (plassid, radnr, stolnr, omraade, salid) values (NULL, ?, ?, ?, ?) ''', (radnr, setenr, omraade, salid,))
                     plassid = cursor.lastrowid
                     conn.commit()
-                    cursor.execute(''' insert into billettKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 14.38, 19.03) ''', (kundeid,))
+                    cursor.execute(''' insert into billettKjop (kjopsid, kundeid, tid, dato) values (NULL, ?, 1438, 19.03) ''', (kundeid,))
                     kjopsid = cursor.lastrowid
                     conn.commit()
                     cursor.execute('''insert into billett (billettid, kjopsid, forestillingid, plassid) values (NULL, ?, ?, ?) ''', (kjopsid, forestillingID ,plassid,))
