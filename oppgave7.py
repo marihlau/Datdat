@@ -25,8 +25,7 @@ def finn_skuespiller_navn(navn):
         print("Skuespiller", navn, ":")
         for rad in resultater:
             if(rad[1]!= navn):
-                print("  Spilte med", rad[1])
-                print(" i skuespillet ", rad[2] )
+                print("  Spilte med", rad[1], "i skuespillet:", rad[2])
     else:
         print("Ingen skuespillere funnet med navnet ", navn)
 
