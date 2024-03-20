@@ -7,27 +7,28 @@ def finn_skuespiller_navn(navn):
     cursor = conn.cursor()
 
     cursor.execute('''
-            SELECT a1.navn, a2.navn, teaterStykke.navn
-            FROM (((ansatt AS a1 JOIN spillerRolle ON a1.ansattID=spillerRolle.ansattID)
-                   JOIN teaterStykke ON spillerRolle.stykkeID=teaterStykke.stykkeID) as ansatt1
-                JOIN 
-                   (ansatt AS a2 JOIN spillerRolle ON a2.ansattID=spillerRolle.ansattID) as ansatt2 
-                ON  
-                    ansatt1.stykkeID=ansatt2.stykkeID)
-                JOIN teaterSTykke ON ansatt1.stykkeID=teaterStykke.stykkeID
-            WHERE ansatt.navn=?
-            GROUP BY ansatt.ansattID
+            SELECT a1.navn, a2.navn, teaterstykke.navn
+            FROM 
+                   (((ansatt AS a1 JOIN spillerRolle AS spiller1 ON a1.ansattID=spiller1.ansattID)
+                   JOIN erIAKT AS akt1 ON spiller1.stykkeID=akt1.stykkeID) AS ansatt1
+                JOIN
+                   ((ansatt AS a2 JOIN spillerRolle AS spiller2 ON a2.ansattID=spiller2.ansattID)
+                   JOIN erIAKT AS akt2 ON spiller2.stykkeID=akt2.stykkeID) AS ansatt2
+                ON ansatt1.aktNR=ansatt2.aktNR)
+                JOIN teaterstykke ON teaterstykke.stykkeID=ansatt1.stykkeID
+            WHERE ansatt1.navn=?
+            GROUP BY ansatt1.ansattID
             ''', (navn,))
-        
+    
     resultater = cursor.fetchall()
 
     if resultater:
-        print("Skuespillere på", navn, ":")
+        print("Skuespiller med", navn, ":")
         for rad in resultater:
-            print("- Skuespiller:", rad[0])
-            print("  Spilt med:", rad[1])
+            print("  Spilte med", rad[1])
+            print(" i skuespillet ", rad[2] )
     else:
-        print("Ingen skuespillere funnet med ", navn)
+        print("Ingen skuespillere funnet med navn ", navn)
 
     conn.close()
 
